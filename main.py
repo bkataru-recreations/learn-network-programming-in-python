@@ -3,8 +3,19 @@
 import socket
 import sys
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+try:
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    print('socket successfully created!')
+except socket.error as err:
+    print(f'socket creation failed with error {err}')
 
-# equivalent to `ping www.github.com`
-ip = socket.gethostbyname('www.github.com')
-print(ip)
+port = 80
+
+try:
+    host_ip = socket.gethostbyname('www.github.com')
+except socket.gaierror: # DNS error
+    print('error resolving the host')
+    sys.exit()
+
+s.connect((host_ip, port))
+print(f'socket has successfully connected to GitHub on port {port} == {host_ip}')
